@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameBoard = document.getElementById('gameBoard');
     const restartButton = document.getElementById('restartButton');
     let currentPlayer = 1;  // Starting with Player 1
+    let gameIsOver = false;  // Flag to track if the game is over
 
     // Function to initialize the game board
     function initializeBoard() {
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         currentPlayer = 1;  // Reset to Player 1 when initializing
+        gameIsOver = false;  // Reset game over flag
     }
 
     // Function to update the game board based on the move
@@ -31,13 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to toggle the current player
-    function togglePlayer() {
-        currentPlayer = currentPlayer === 1 ? 2 : 1;
-    }
-
     // Function to handle a player's move
     function handleMove(column) {
+        if (gameIsOver) {
+            alert('Game is already over. Please restart to play again.');
+            return;
+        }
+
         fetch('/move', {
             method: 'POST',
             headers: {
@@ -50,10 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.status === 'success' || data.status === 'win') {
                 updateBoard(column, currentPlayer);
                 if (data.status === 'win') {
-                    // Set a short timeout to allow the UI to update
                     setTimeout(() => {
                         alert(data.message);  // Alerting the win after the board is updated
-                    }, 100);  // 100 milliseconds delay
+                        gameIsOver = true;  // Set the game as over
+                    }, 100);  // Short delay
                 } else {
                     togglePlayer();  // Toggle to the next player after a successful move
                 }
@@ -62,7 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
         .catch(error => console.error('Error:', error));
-    }    
+    }
+
+    // Function to toggle the current player
+    function togglePlayer() {
+        currentPlayer = currentPlayer === 1 ? 2 : 1;
+    }
 
     // Event listener for game cell clicks
     gameBoard.addEventListener('click', (e) => {
@@ -78,8 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                initializeBoard();  // Reset the frontend board
-                currentPlayer = 1;  // Reset to Player 1
+                initializeBoard();
             } else {
                 console.error('Error resetting game:', data.message);
             }
