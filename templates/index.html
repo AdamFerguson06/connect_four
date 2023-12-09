@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Connect Four</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Link to the CSS file -->
+</head>
+<body>
+    <h1>Connect Four</h1>
+    <div id="gameBoard">
+        <!-- Dynamic game board will be generated here by JavaScript -->
+    </div>
+    <button id="restartButton">Restart Game</button>
+    <script src="{{ url_for('static', filename='script.js') }}"></script> <!-- Link to the JavaScript file -->
+</body>
+</html>
