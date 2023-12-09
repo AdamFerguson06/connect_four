@@ -5,6 +5,7 @@ app = Flask(__name__)
 
 # Initialize game state
 game_state = connect_four.create_board()
+game_over = False
 
 @app.route('/')
 def index():
@@ -12,6 +13,10 @@ def index():
 
 @app.route('/move', methods=['POST'])
 def make_move():
+    global current_player, game_over
+    if game_over:
+        return jsonify({'status': 'error', 'message': 'Game is over'})
+
     data = request.json
     column = int(data['column'])
     player = int(data['player'])
@@ -32,8 +37,10 @@ def make_move():
 
 @app.route('/reset', methods=['GET'])
 def reset_game():
-    global game_state
+    global game_state, current_player, game_over
     game_state = connect_four.create_board()
+    current_player = 1
+    game_over = False
     return jsonify({'status': 'success', 'message': 'Game reset'})
 
 if __name__ == '__main__':
