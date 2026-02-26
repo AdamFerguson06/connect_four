@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to update the game board based on the move
     function updateBoard(column, player) {
         let cellFound = false;
-        for (let row = 5; row >= 0; row--) {
+        for (let row = 5; row > 0; row--) {
             let cell = document.querySelector(`.gameCell[data-row='${row}'][data-column='${column}']`);
             if (!cell.classList.contains('player1') && !cell.classList.contains('player2')) {
                 cell.classList.add(player === 1 ? 'player1' : 'player2');
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to toggle the current player
     function togglePlayer() {
-        currentPlayer = currentPlayer === 1 ? 2 : 1;
+        currentPlayer = currentPlayer == 1 ? 2 : 1;
     }
 
     // Event listener for game cell clicks
