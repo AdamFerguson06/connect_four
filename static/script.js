@@ -80,7 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
     gameBoard.addEventListener('click', (e) => {
         if (e.target.classList.contains('gameCell')) {
             const column = e.target.dataset.column;
-            handleMove(column);
+            if (column !== undefined) {
+                handleMove(column);
+            }
         }
     });
 
