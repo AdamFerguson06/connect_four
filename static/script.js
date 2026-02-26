@@ -24,12 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to update the game board based on the move
     function updateBoard(column, player) {
+        let cellFound = false;
         for (let row = 5; row >= 0; row--) {
             let cell = document.querySelector(`.gameCell[data-row='${row}'][data-column='${column}']`);
             if (!cell.classList.contains('player1') && !cell.classList.contains('player2')) {
                 cell.classList.add(player === 1 ? 'player1' : 'player2');
+                cellFound = true;
                 break;
             }
+        }
+        if (!cellFound) {
+            console.error('Column is full, cannot update board.');
         }
     }
 
