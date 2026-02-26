@@ -24,12 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to update the game board based on the move
     function updateBoard(column, player) {
-        for (let row = 5; row >= 0; row--) {
+        let cellFound = false;
+        for (let row = 5; row > 0; row--) {
             let cell = document.querySelector(`.gameCell[data-row='${row}'][data-column='${column}']`);
             if (!cell.classList.contains('player1') && !cell.classList.contains('player2')) {
                 cell.classList.add(player === 1 ? 'player1' : 'player2');
+                cellFound = true;
                 break;
             }
+        }
+        if (!cellFound) {
+            console.error('Column is full, cannot update board.');
         }
     }
 
@@ -68,14 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to toggle the current player
     function togglePlayer() {
-        currentPlayer = currentPlayer === 1 ? 2 : 1;
+        currentPlayer = currentPlayer == 1 ? 2 : 1;
     }
 
     // Event listener for game cell clicks
     gameBoard.addEventListener('click', (e) => {
         if (e.target.classList.contains('gameCell')) {
             const column = e.target.dataset.column;
-            handleMove(column);
+            if (column !== undefined) {
+                handleMove(column);
+            }
         }
     });
 
